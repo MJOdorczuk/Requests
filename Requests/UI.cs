@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Web.Script.Serialization;
 using System.Xml.Serialization;
 using LumenWorks.Framework.IO.Csv;
+using System.Text;
 
 namespace Requests
 {
@@ -23,6 +24,8 @@ namespace Requests
         private NumericUpDown upperBound;
         // Fired for DT adjustment when identifier is changed
         private Action<int> indexChangedAction = (i) => { };
+        private Button SaveButton;
+
         // Fired for DT adjustment when boundaries are chandged
         private Action<float, float> boundsChanged = (lower, upper) => { };
 
@@ -153,6 +156,20 @@ namespace Requests
                     }
                     
                 }
+            };
+            SaveButton.Click += (sender, e) =>
+            {
+                var sb = new StringBuilder();
+
+                var headers = OutputDataGridView.Columns.Cast<DataGridViewColumn>();
+                sb.AppendLine(string.Join(",", headers.Select(column => "\"" + column.HeaderText + "\"").ToArray()));
+
+                foreach (DataGridViewRow row in OutputDataGridView.Rows)
+                {
+                    var cells = row.Cells.Cast<DataGridViewCell>();
+                    sb.AppendLine(string.Join(",", cells.Select(cell => "\"" + cell.Value + "\"").ToArray()));
+                }
+                File.WriteAllText("raport.csv", sb.ToString(), Encoding.UTF8);
             };
             // Set all commands
             foreach (var item in new Dictionary<object, Action>()
@@ -307,6 +324,7 @@ namespace Requests
             this.BoundaryGroupBox = new System.Windows.Forms.GroupBox();
             this.lowerBound = new System.Windows.Forms.NumericUpDown();
             this.upperBound = new System.Windows.Forms.NumericUpDown();
+            this.SaveButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.OutputDataGridView)).BeginInit();
             this.IdentifierGroupBox.SuspendLayout();
             this.BoundaryGroupBox.SuspendLayout();
@@ -398,10 +416,20 @@ namespace Requests
             this.upperBound.TabIndex = 0;
             this.upperBound.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
+            // SaveButton
+            // 
+            this.SaveButton.Location = new System.Drawing.Point(798, 12);
+            this.SaveButton.Name = "SaveButton";
+            this.SaveButton.Size = new System.Drawing.Size(91, 40);
+            this.SaveButton.TabIndex = 6;
+            this.SaveButton.Text = "ZAPISZ";
+            this.SaveButton.UseVisualStyleBackColor = true;
+            // 
             // UI
             // 
             this.AllowDrop = true;
             this.ClientSize = new System.Drawing.Size(901, 671);
+            this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.BoundaryGroupBox);
             this.Controls.Add(this.IdentifierGroupBox);
             this.Controls.Add(this.CommandBox);

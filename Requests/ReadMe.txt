@@ -65,7 +65,10 @@ Cost range can be speciefied in the "Zakres" box, upper bound is specified by va
 It is enabled only if command using cost range is on.
 Data can be sorted by the values in a specified column by clicking on the arrows by the column's label.
 
------ POLISH -----
+Moreover there is a possibility to save the data table to .csv file by clicking the "ZAPISZ" button.
+It creates a raport.csv file in the location of the application.
+
+----- POLSKI -----
 Data Parser to program służący do prostych działań na plikach .csv, .json i .xml.
 Działa wyłącznie dla konkretnego formatu danych:
 
@@ -132,3 +135,6 @@ Możliwość ta istnieje wyłącznie gdy została wybrana komenda oczekująca ta
 Przedział cenowy może zostać wybrany w polu "Zakres", odpowiednio górne pole odpowiada za górne ograniczenie, dolne zaś za dolne.
 Możliwość ta istnieje wyłącznie gdy została wybrana komenda oczekująca takiej informacji.
 Dane mogą zostać posortowane po wartościach ze wskazanej kolumny poprzez kliknięcie odpowiednije strzałki obok etykiety tej kolumny.
+
+Dodatkowo istnieje możliwość zapisania tabeli danych do pliku .csv poprzez kliknięcie przycisku "ZAPISZ".
+Generuje to plik raport.csv w lokacji programu.
