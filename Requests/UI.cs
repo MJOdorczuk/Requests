@@ -195,7 +195,7 @@ namespace Requests
                 } },
                 { "Łączna kwota zamówień", () =>
                 {
-                    var total = dt.AsEnumerable().Select(x => x.Field<float>(Request.PRICE)).Aggregate((a, b) => a + b);
+                    var total = dt.AsEnumerable().Select(x => x.Field<float>(Request.PRICE) * x.Field<int>(Request.QUANTITY)).Aggregate((a, b) => a + b);
                     var totalDT = new DataTable();
                     totalDT.Columns.Add("Łączna kwota zamówień", typeof(float));
                     totalDT.Rows.Add(new object[] { total });
@@ -206,7 +206,7 @@ namespace Requests
                     indexChangedAction = (i) =>
                     {
                         var total = dt.AsEnumerable().Where(x => (int)x[Request.CLIENTID] == i)
-                            .Select(x => x.Field<float>(Request.PRICE)).Aggregate((a, b) => a + b);
+                            .Select(x => x.Field<float>(Request.PRICE) * x.Field<int>(Request.QUANTITY)).Aggregate((a, b) => a + b);
                         var totalDT = new DataTable();
                         totalDT.Columns.Add($"Łączna kwota zamówień dla klienta {i}", typeof(int));
                         totalDT.Rows.Add(new object[] { total });
@@ -232,7 +232,7 @@ namespace Requests
                 } },
                 { "Średnia wartość zamówień", () =>
                 {
-                    var sum = dt.AsEnumerable().Select(x => x.Field<float>(Request.PRICE)).Aggregate((a, b) => a + b);
+                    var sum = dt.AsEnumerable().Select(x => x.Field<float>(Request.PRICE) * x.Field<int>(Request.QUANTITY)).Aggregate((a, b) => a + b);
                     var table = new DataTable();
                     table.Columns.Add("Średnia wartość zamówień");
                     table.Rows.Add(new object[]{sum / dt.Rows.Count});
@@ -243,10 +243,11 @@ namespace Requests
                     indexChangedAction = (i) =>
                     {
                         var sum = dt.AsEnumerable().Where(x => x.Field<int>(Request.CLIENTID) == i)
-                            .Select(x => x.Field<float>(Request.PRICE)).Aggregate((a, b) => a + b);
+                            .Select(x => x.Field<float>(Request.PRICE) * x.Field<int>(Request.QUANTITY)).Aggregate((a, b) => a + b);
+                        var count = dt.AsEnumerable().Where(x => x.Field<int>(Request.CLIENTID) == i).Count();
                         var table = new DataTable();
                         table.Columns.Add($"Średnia wartość zamówień dla {i}");
-                        table.Rows.Add(new object[]{sum / dt.Rows.Count});
+                        table.Rows.Add(new object[]{sum / count});
                         OutputDataGridView.DataSource = table;
                     };
                     UpdateClientIdentifiers();
